@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>初始化地图中心与地图级别</title>
+</head>
+<body>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+    #container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+  </style>
+  <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=831c3262a98f77fcd4f52ad006e25cb0"></script> 
+  <script>
+    window.onload = function () {
+      new AMap.Map('container', {
+        zoom: 11, //初始地图级别
+        center: [121.498586, 31.239637], //初始地图中心点
+      })
+    }
+  </script>
+  <div id="container"></div>
+</body>
+</html>

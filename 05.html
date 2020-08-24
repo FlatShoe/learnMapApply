@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>获取/设置地图的显示范围</title>
+</head>
+
+<body>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    #container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+
+    .get-range {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 99;
+      width: 260px;
+      border: 1px solid #ccc;
+      box-shadow: 0 0 5px;
+      background-color: #fff;
+      padding: 9px 15px;
+      font-size: 14px;
+    }
+
+    .get-range h5 {
+      margin-bottom: 6px;
+    }
+
+    .get-range .range-info {
+      display: flex;
+      flex-direction: column;
+      font-size: 12px;
+    }
+
+    .range-info .range-text {
+      color: #118FD4;
+    }
+
+    .set-range {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 99;
+      border: 1px solid #ccc;
+      box-shadow: 0 0 5px;
+      background-color: #fff;
+      padding: 9px 15px;
+      font-size: 14px;
+    }
+
+    .set-range button {
+      border: none;
+      outline: none;
+      padding: 5px;
+    }
+  </style>
+  <script type="text/javascript"
+    src="https://webapi.amap.com/maps?v=1.4.15&key=831c3262a98f77fcd4f52ad006e25cb0"></script>
+  <script>
+    /*
+    * getBounds() 获取当前地图的显示范围
+    * setBounds(new AMap.Bounds(左下角坐标数组, 右上角坐标数组))
+    */
+    window.onload = function () {
+      const map = new AMap.Map('container')
+
+      const range_text_ne = document.querySelector('.range-text-ne-hook'),
+        range_text_sw = document.querySelector('.range-text-sw-hook')
+
+      map.on('moveend', function () {
+        // 获取当前地图显示范围
+        let info = map.getBounds()
+        const obj = { Q: 22.404283327044258, R: 113.94651996865872, lng: 113.94652, lat: 22.404283 }
+        range_text_ne.innerText = info.northeast.toString()
+        range_text_sw.innerText = info.southwest.toString()
+      })
+
+      document.querySelector('.set-range-btn').addEventListener('click', function () {
+        /*
+        * 实例AMap.Bounds
+        * @param {Array}  左下角坐标
+        * @param {Array}  右上角坐标
+        */
+        const myBounds = new AMap.Bounds([114.06737, 24.195224], [106.563707, 22.515966])
+        /*
+        * AMap.Bounds该实例作为setBounds的参数
+        */
+        map.setBounds(myBounds)
+      })
+    }
+  </script>
+  <div id="container"></div>
+  <div class="set-range">
+    <button class="set-range-btn">确定</button>
+  </div>
+  <div class="get-range">
+    <h5>当前地图显示范围</h5>
+    <div class="range-info">
+      <!-- 地图右上角坐标 -->
+      <span>NorthEast坐标: <i class="range-text range-text-ne-hook">--</i></span>
+      <!-- 地图左下角坐标 -->
+      <span>SouthWest坐标: <i class="range-text range-text-sw-hook">--</i></span>
+    </div>
+  </div>
+</body>
+
+</html>

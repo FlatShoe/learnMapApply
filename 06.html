@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>限制地图显示范围</title>
+</head>
+<body>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+    #container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+    .switch {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 99;
+      border: 1px solid #ccc;
+      box-shadow: 0 0 5px;
+      background-color: #fff;
+      padding: 9px 15px;
+      font-size: 14px;
+    }
+    .switch button {
+      border: none;
+      outline: none;
+      padding: 5px;
+    }
+  </style>
+  <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=831c3262a98f77fcd4f52ad006e25cb0"></script> 
+  <script>
+    /*
+    * setLimitBounds() 限制显示范围
+    * clearLimitBounds() 清除显示范围
+    */
+    window.onload = function () {
+      const map = new AMap.Map('container')
+      const set_limit = document.querySelector('.set-limit'),
+            clear_limit = document.querySelector('.clear-limit')
+      
+      // 限制范围
+      set_limit.addEventListener('click', function () {
+        const bounds = map.getBounds()
+        console.log(bounds)
+        map.setLimitBounds(bounds)
+      })
+
+      // 取消限制
+      clear_limit.addEventListener('click', function () {
+        map.clearLimitBounds()
+      })
+    }
+  </script>
+  <div id="container"></div>
+  <div class="switch">
+    <button class="set-limit">限制</button>
+    <button class="clear-limit">取消限制</button>
+  </div>
+</body>
+</html>

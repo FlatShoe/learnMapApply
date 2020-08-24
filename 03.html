@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>获取/设置地图级别与地图中心</title>
+</head>
+<body>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+    #container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+    .get-wrapper {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 99;
+      min-width: 240px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      box-shadow: 0 0 2px;
+      padding: 10px;
+      background-color: rgba(255, 255, 255, .9);
+    }
+    .set-wrapper {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 99;
+      border: 1px solid #ccc;
+      box-shadow: 0 0 2px;
+      padding: 10px;
+      background-color: rgba(255, 255, 255, .9);
+    }
+    .set-wrapper input,
+    .set-wrapper button {
+      outline: none;
+      border: none;
+      border: 1px solid #ccc;
+    }
+    .set-wrapper button {
+      padding: 0 3px;
+      border: none;
+      background-color: #70AFF4;
+      color: #fff;
+    }
+    .zoom-center {
+      display: flex;
+      justify-content: center;
+      padding-top: 5px;
+    }
+  </style>
+  <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=831c3262a98f77fcd4f52ad006e25cb0"></script> 
+  <script>
+    /*
+      // 获取
+      zoom 值越大 地图月精细 越小显示范围越广
+      center 经纬度
+      // 设置
+      setZoom() 级别
+      setCenter([x, y]) 坐标 x y
+    */
+
+    window.onload = function () {
+      const map = new AMap.Map('container', {
+        zoom: 11,
+        center: [121.498586, 31.239637],
+      })
+
+    // 获取地图级别显示的文本
+    const zoom_text = document.querySelector('.zoom-text'),
+          center_text = document.querySelector('.center-text')
+    // 文本显示初始化
+    zoom_text.innerText = map.getZoom()
+    center_text.innerText = map.getCenter()
+    // 获取地图级别 与 地图中心  
+       // getCenter 获取当前地图中心
+      map.on('zoomend', function () { // 移动结束事件
+        zoom_text.innerText = map.getZoom()
+      })
+      // getZoom 获取当前地图级别 
+      map.on('moveend', function () { // 切换级别停止事件
+        center_text.innerText = map.getCenter()
+      })
+
+    // 设置地图级别 与 地图中心
+      // 设置地图级别的input框
+    const zoom_input = document.querySelector('.zoom-input-hook'),
+      // 设置地图中心的input框
+          center_inputX = document.querySelector('.center-input-x-hook'),
+          center_inputY = document.querySelector('.center-input-y-hook')
+          // setZoom 设置地图级别
+    document.querySelector('.set-zoom-btn-hook')
+            .addEventListener('click', function () {
+              let value = zoom_input.value
+              map.setZoom(value)
+              zoom_input.value = ''
+            })
+          // setCenter 设置地图中心
+    document.querySelector('.set-center-btn-hook')
+            .addEventListener('click', function () {
+              let valueX = center_inputX.value,
+                  valueY = center_inputY.value
+              map.setCenter([valueX, valueY])
+              center_inputX.value = center_inputY.value = ''
+            })
+    
+          // setZoomAndCenter 同时设置地图级别与地图中心点
+    document.querySelector('.zoom-center-hook')
+            .addEventListener('click', function () {
+              let level = zoom_input.value,
+                  x = center_inputX.value
+                  y = center_inputY.value
+              map.setZoomAndCenter(level, [x, y])
+              zoom_input.value = center_inputX.value = center_inputY.value = ''
+            })
+
+    }
+  </script>
+  <div id="container"></div>
+  <div class="get-wrapper">
+    <div class="zoom-inner">
+      当前地图级别: <span class="zoom-text">--</span>
+    </div>
+    <div class="center-inner">
+      当前地图中心: <span class="center-text">--</span>
+    </div>
+  </div>
+  <div class="set-wrapper">
+    <div class="set-zoom">
+      <input class="zoom-input-hook" type="text" placeholder="请设置地图级别" />
+      <button class="set-zoom-btn-hook">确定</button>
+    </div>
+    <div class="set-center">
+      <input class="center-input-x-hook" type="number" placeholder="请设置地图中心x坐标" />
+      <input class="center-input-y-hook" type="number" placeholder="请设置地图中心y坐标" />
+      <button class="set-center-btn-hook">确定</button>
+    </div>
+    <div class="zoom-center">
+      <button class="zoom-center-hook">同时设置地图中心与地图级别</button>
+    </div>
+  </div>
+</body>
+</html>

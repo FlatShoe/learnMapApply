@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>获取地图的当前行政区</title>
+</head>
+<style>
+  * {
+    padding: 0;
+    margin: 0;
+  }
+  li {
+    list-style: none;
+  }
+  #container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  #city-content {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 99;
+    width: 260px;
+    height: 150px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 5px;
+    background-color: #fff;
+    padding: 9px 15px;
+    font-size: 14px;
+  }
+
+  #city-content h5 {
+    margin-bottom: 6px;
+  }
+  .city-info .city-message {
+    display: flex;
+    flex-direction: column;
+    height: 72px;
+    padding: 2px 0;
+  }
+  .node-container .node-body {
+    padding-left: 25px;
+    border-left: 1px dashed #ccc;
+    margin-left: 2px;
+    font-size: 12px;
+  }
+  .node-container .node-body .leaf-container {
+    color: #41A641;
+  }
+  .node-container .node-bracket {
+    color: #89B3D3;
+  }
+  .set-city {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 99;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 5px;
+    background-color: #fff;
+    padding: 9px 15px;
+    font-size: 14px;
+  }
+  .set-city input,
+  .set-city button {
+    border: none;
+    outline: none;
+  }
+  .set-city button {
+    padding: 5px;
+  }
+  .set-city input {
+    border: 1px solid #ccc;
+  }
+</style>
+
+<body>
+  <script type="text/javascript"
+    src="https://webapi.amap.com/maps?v=1.4.15&key=831c3262a98f77fcd4f52ad006e25cb0"></script>
+  <script type="text/javascript"
+    src="https://a.amap.com/jsapi_demos/static/demo-center/js/jquery-1.11.1.min.js"></script>
+  <script type="text/javascript" src="https://a.amap.com/jsapi_demos/static/demo-center/js/underscore-min.js"></script>
+  <script type="text/javascript" src="https://a.amap.com/jsapi_demos/static/demo-center/js/backbone-min.js"></script>
+  <script type="text/javascript" src='https://a.amap.com/jsapi_demos/static/demo-center/js/prety-json.js'></script>
+
+  <script>
+    /*
+      getCity() 获取地图当前行政区
+      setCity('city') 设置当前行政区
+    */
+    window.onload = function () {
+      const map = new AMap.Map('container')
+      const city_text = document.querySelector('.city-text-hook'),
+        city_message = document.querySelector('.city-message')
+      // 获取当前地图行政区
+      map.on('moveend', function () {
+        // city_message.innerHTML = ''
+        map.getCity(function (info) {
+          /*
+          * @param {object} 当前城市信息
+          */
+          // 可以使用官方 提供API 进行信息渲染
+          var node = new PrettyJSON.view.Node({
+            el: document.querySelector(".city-message"),
+            data: info
+          })
+        })
+      })
+
+      // 设置当前行政区
+      const city_input = document.querySelector('.set-city-input'),
+            city_btn = document.querySelector('.set-city-btn')
+      city_btn.addEventListener('click', function () {
+        let value = city_input.value
+        map.setCity(value)
+        city_input.value = ''
+      })
+    }
+  </script>
+  <div id="container"></div>
+  <div id="city-content">
+    <h5>当前所在行政区信息</h5>
+    <div class="city-info">
+      <p class="city-message"></p>
+    </div>
+  </div>
+  <div class="set-city">
+    <input class="set-city-input" type="text" placeholder="请输入地名" />
+    <button class="set-city-btn">确定</button>
+  </div>
+</body>
+
+</html>
