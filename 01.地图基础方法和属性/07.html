@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>地图的平移</title>
+</head>
+<body>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+    #container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+    .pan-by {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 99;
+      border: 1px solid #ccc;
+      box-shadow: 0 0 5px;
+      padding: 20px;
+    }
+    input {
+      border: none;
+      outline: none;
+      border: 1px solid #ccc;
+    }
+    button {
+      border: none;
+      color: #fff;
+      outline: none;
+      background-color: #A3CCFF;
+      padding: 5px 10px;
+    }
+    .pan-to {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 99;
+      border: 1px solid #ccc;
+      box-shadow: 0 0 5px;
+      padding: 20px;
+    }
+  </style>
+  
+  <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=831c3262a98f77fcd4f52ad006e25cb0"></script> 
+  <script>
+    /*
+    * panBy 会移动传入的数值以px作单位
+    *     panBy(数值, 数值) x移动的距离, y移动的距离
+    * panTo 移动到目标的坐标
+          panTo([x, y])
+    */
+    window.onload = function () {
+      const map = new AMap.Map('container')
+      
+      const panByInputX = document.querySelector('.pan-by-input-x-hook'),
+            panByInputY = document.querySelector('.pan-by-input-y-hook')
+            panByBtn = document.querySelector('.pan-by-btn-hook')
+        
+        // 点击按钮地图平移的距离
+      panByBtn.addEventListener('click', () => {
+        let valueX = panByInputX.value
+        let valueY = panByInputY.value
+        map.panBy(valueX, valueY)
+        panByInputX.value = panByInputY.value = ''
+      })
+
+      const panToInputX = document.querySelector('.pan-to-input-x-hook'),
+            panToInputY = document.querySelector('.pan-to-input-y-hook')
+            panToBtn = document.querySelector('.pan-to-btn-hook')
+            
+        // 点击按钮移动到目标点    
+      panToBtn.addEventListener('click', () => {
+        let valueX = panToInputX.value
+        let valueY = panToInputY.value
+        map.panTo([valueX, valueY])
+        panByInputX.value = panByInputY.value = ''
+      })     
+    }
+  </script>
+  <div id="container"></div>
+  <div class="pan-by">
+    <input class="pan-by-input-x-hook" type="number"  placeholder="输入x轴移动的距离" />
+    <input class="pan-by-input-y-hook" type="number"  placeholder="输入y轴移动的距离" />
+    <button class="pan-by-btn-hook">确定</button>
+  </div>
+  <div class="pan-to">
+    <input class="pan-to-input-x-hook" type="number"  placeholder="输入x轴的目标点" />
+    <input class="pan-to-input-y-hook" type="number"  placeholder="输入y轴的目标点" />
+    <button class="pan-to-btn-hook">确定</button>
+  </div>
+</body>
+</html>

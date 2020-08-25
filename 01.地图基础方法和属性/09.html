@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>设置鼠标的样式</title>
+</head>
+
+<body>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    #container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+  </style>
+  <script type="text/javascript"
+    src="https://webapi.amap.com/maps?v=1.4.15&key=831c3262a98f77fcd4f52ad006e25cb0"></script>
+  <script>
+    /*
+    * map.setDefaultCursor('css中cursor的样式')
+    */
+    window.onload = function () {
+      const map = new AMap.Map('container')
+      map.setDefaultCursor('crosshair')
+    } 
+
+  </script>
+  <div id="container"></div>
+</body>
+
+</html>

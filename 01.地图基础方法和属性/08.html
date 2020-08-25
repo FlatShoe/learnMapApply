@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>获取鼠标的经纬度</title>
+</head>
+
+<body>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    #container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+    .inglat-container {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      z-index: 99;
+      border: 1px solid #ccc;
+      box-shadow: 0 0 5px;
+      padding: 20px;
+      font-size: 14px;
+    }
+    .inglat-container span {
+      margin-bottom: 10px;
+    }
+  </style>
+  <script type="text/javascript"
+    src="https://webapi.amap.com/maps?v=1.4.15&key=831c3262a98f77fcd4f52ad006e25cb0"></script>
+  <script>
+    /*
+    * 实例对象中的事件参数对象，可以获取经纬度 e.lnglat.lng 横坐标 e.lnglat.lat 纵坐标
+    */
+    window.onload = function () {
+      const map = new AMap.Map('container')
+      const inglatText = document.querySelector('.inglat-text')
+
+      map.on('click', function (e) {
+        const {lnglat: {lng, lat}} = e
+        const str = [lng, lat].toString()
+        inglatText.value = str
+      })
+    }
+  </script>
+  <div id="container"></div>
+  <div class="inglat-container">
+    <span>获取经纬度</span>
+    <input class="inglat-text" type="text" />
+  </div>
+</body>
+
+</html>
