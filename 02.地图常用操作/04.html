@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>地图搜索与poi结合（2）搜索关键字提示后查询</title>
+  <style>
+    #container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+    #serchNode {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 99;
+    }
+  </style>
+</head>
+<body>
+  <!-- 通过链接参数 引入两个插件 -->
+  <script type="text/javascript"
+    src="https://webapi.amap.com/maps?v=1.4.15&key=831c3262a98f77fcd4f52ad006e25cb0&plugin=AMap.Autocomplete,AMap.PlaceSearch"></script>
+  <script>
+    window.onload = function () {
+      const map = new AMap.Map('container')
+      // 关键字搜索服务插件
+      const placeSearch = new AMap.PlaceSearch({
+        map: map
+      })
+      // 输入提示插件
+      const auto = new AMap.Autocomplete({
+        input: 'searchIpt'
+      })
+      /*
+      * @Dexription 注册监听，当选中某条记录时会触发
+      * @param {Object} auto 输入提示插件
+      * @param {String} select 事件类型 选择事件
+      * @param {Function} callback
+      */
+      AMap.event.addListener(auto, 'select', function (e) {
+        /*@param {object} e 当前选择的记录的详细数据*/
+        const {name: keyWords} = e.poi
+        placeSearch.search(keyWords)
+      })
+    }
+  </script>
+  <div id="container"></div>
+  <div id="serchNode">
+    <input type="text" id="searchIpt" />
+  </div>
+</body>
+</html>

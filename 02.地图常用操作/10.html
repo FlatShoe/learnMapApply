@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>路线指定 （步行路线-地点关键字）</title>
+  <style>
+    #container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+
+    .panel-content {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 99;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 引入驾车路线规划插件 AMap.Driving -->
+  <script type="text/javascript"
+    src="https://webapi.amap.com/maps?v=1.4.15&key=831c3262a98f77fcd4f52ad006e25cb0&plugin=AMap.Walking,AMap.Autocomplete"></script>
+  <script>
+    /*
+    *   // 构造驾车规划导航类 并调用search方法
+    *   new AMap.Walking({
+    *    map: map,
+    *    panel: panel
+    *   }).serch([{keyword: '起点搜索关键字', city: '限制哪个城市'},{keyword: 终点搜索关键字, city: '限制哪个城市'}])
+    */
+    window.onload = function () {
+      const map = new AMap.Map('container')
+      // 开始点与结束点信息
+      let startInfo = {},
+          endInfo = {}
+      // 关键字搜索提示
+      const autoStart = new AMap.Autocomplete({
+        input: 'search-input-start'
+      })
+      const autoEnd = new AMap.Autocomplete({
+        input: 'search-input-end'
+      })
+      // 监听选择事件
+      AMap.event.addListener(autoStart, 'select', function (e) {
+        startInfo = e.poi
+      })
+      AMap.event.addListener(autoEnd, 'select', function (e) {
+        endInfo = e.poi
+      })
+
+      // 构造驾车规划导航类
+      const walking = new AMap.Walking({
+        map: map,
+        panel: panel
+      })
+      document.querySelector('.btn')
+              .addEventListener('click', function () {
+                const {name: startName} = startInfo,
+                      {name: endName} = endInfo
+                walking.search([
+                  {keyword: startName, city: '北京'},
+                  {keyword: endName, city: '北京'}
+                ])
+              })
+      
+    }
+  </script>
+  <div id="container"></div>
+  <div class="panel-content">
+    <label>起点</label>
+    <input type="text" id="search-input-start" />
+    <label>终点</label>
+    <input type="text" id="search-input-end" />
+    <button class="btn">确定</button>
+    <div id="panel"></div>
+  </div>
+</body>
+
+</html>

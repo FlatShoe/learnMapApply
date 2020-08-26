@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>地图控件</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
+      list-style: none;
+    }
+
+    #container {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+
+    .control-bar {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 99;
+      padding: 20px;
+      font-size: 12px;
+      border: 1px solid #ccc;
+      background-color: #fff;
+      box-shadow: 0 0 5px;
+    }
+
+    .control-item {
+      display: flex;
+      align-items: center;
+      height: 25px;
+      line-height: 25px;
+    }
+
+    .control-bar label {
+      padding-left: 15px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 通过参数形式 加载 比例尺控件，工具条控件，鹰眼控件 -->
+  <script type="text/javascript"
+    src="https://webapi.amap.com/maps?v=1.4.15&key=831c3262a98f77fcd4f52ad006e25cb0&plugin=AMap.Scale,AMap.OverView,AMap.ToolBar"></script>
+
+  <script>
+    /*
+    *  实例控件
+    * const scale = new AMap.Scale({
+        visible: false
+      })
+       添加控件
+      map.addControl(scale)
+      控制控件
+      scale.shwo()
+      scale.hide()
+    */
+
+    window.onload = function () {
+      const map = new AMap.Map('container')
+
+      // 实例控件  并将当前控件实例添加到地图上
+        // 实例比例尺控件
+      const scale = new AMap.Scale({
+        visible: false
+      })
+        // 实例工具条控件
+      const toolBar = new AMap.ToolBar({
+        visible: false
+      })
+        // 实例鹰眼控件
+      const overView = new AMap.OverView({
+        visible: false
+      })
+        //添加比例尺
+      map.addControl(scale)
+        //添加工具条
+      map.addControl(toolBar)
+        //添加鹰眼
+      map.addControl(overView)
+
+
+      // 获取元素
+      const scale_input = document.querySelector('.scale-hook'), // 控制比例尺
+            toolBar_input = document.querySelector('.toolBar-hook') // 控制工具条
+            toolBar_direction_input = document.querySelector('.toolBar-direction-hook') //控制工具条方向盘
+            toolBar_ruler_input = document.querySelector('.toolBar-ruler-hook') //控制工具条尺
+            overview_input = document.querySelector('.overview-hook') // 显示鹰眼
+            overview_open_input = document.querySelector('.overview-opne-hook') // 显示鹰眼
+
+      // 空间控制器事件 
+      // 控制比例尺事件
+      scale_input.addEventListener('change', function (e) {
+        let isChecked = e.target.checked
+        if (isChecked) return scale.open()
+        scale.close()
+      })
+
+      let toolBarVasable = false
+      // 保证工具条方向盘，工具条尺子是否可选
+      toolBar_direction_input.disabled = toolBar_ruler_input.disabled = !toolBarVasable
+      // 控制工具条事件
+      toolBar_input.addEventListener('change', function (e) {
+        // 保证工具条，工具条方向盘，工具条尺子一致显示
+        toolBar_direction_input.checked = toolBar_ruler_input.checked = toolBarVasable = e.target.checked
+        // 保证工具条方向盘，工具条尺子是否可选
+        toolBar_direction_input.disabled = toolBar_ruler_input.disabled = !e.target.checked
+        if (toolBarVasable) {
+          toolBar.show()
+          toolBar.showDirection()
+          toolBar.showRuler()
+        } else {
+          toolBar.hide()
+          toolBar.hideDirection()
+          toolBar.hideRuler()
+        }
+      })
+      // 控制工具条方向盘事件
+      toolBar_direction_input.addEventListener('change', function (e) {
+        let isChecked = e.target.checked
+        if (isChecked) return toolBar.showDirection()
+        toolBar.hideDirection()
+      })
+      // 控制工具条尺子事件
+      toolBar_ruler_input.addEventListener('change', function (e) {
+        let isChecked = e.target.checked
+        if (isChecked) return toolBar.showRuler()
+        toolBar.hideRuler()
+      })
+      // 显示隐藏鹰眼事件
+      overview_open_input.disabled = true
+      overview_input.addEventListener('change', function (e) {
+        let isChecked = e.target.checked
+        overview_open_input.disabled = !isChecked
+        if (isChecked) {
+          overView.show()
+        } else {
+          overView.hide()
+          overview_open_input.checked = false
+        }
+      })
+      // 展开关闭鹰眼事件
+      overview_open_input.addEventListener('change', function (e) {
+        let isChecked = e.target.checked
+        if (isChecked) return overView.open()
+        overView.close()
+      })
+    }
+
+  </script>
+  <div id="container"></div>
+  <div class="control-bar">
+    <ul>
+      <li class="control-item">
+        <input class="scale-hook" type="checkbox"><label>比例尺</label>
+      </li>
+      <li class="control-item">
+        <input class="toolBar-hook" type="checkbox"><label>工具条</label>
+      </li>
+      <li class="control-item">
+        <input class="toolBar-direction-hook" type="checkbox"><label>工具条方向盘</label>
+      </li>
+      <li class="control-item">
+        <input class="toolBar-ruler-hook" type="checkbox"><label>工具条标尺</label>
+      </li>
+      <li class="control-item">
+        <input class="overview-hook" type="checkbox"><label>显示鹰眼</label>
+      </li>
+      <li class="control-item">
+        <input class="overview-opne-hook" type="checkbox"><label>展开鹰眼</label>
+      </li>
+    </ul>
+  </div>
+</body>
+
+</html>

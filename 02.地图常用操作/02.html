@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>地图搜索 （使用官方提供的提示信息显示模板）</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+    #container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+    .map-serch {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 20px;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=831c3262a98f77fcd4f52ad006e25cb0"></script>
+  <script>
+    window.onload = function () {
+      const map = new AMap.Map('container')
+      AMap.plugin('AMap.Autocomplete', function () {
+        // 使用官方提供信息显示模板 提供input
+        new AMap.Autocomplete({
+          input: 'search-input'
+        })
+
+        const serch_input = document.getElementById('search-input'),
+              toCityBtn = document.querySelector('.toCityBtn')
+        toCityBtn.addEventListener('click', function () {
+          const keyWords = serch_input.value
+          console.log(keyWords)
+          map.setCity(keyWords)
+        })
+      })
+    }
+  </script>
+  <div id="container"></div>
+  <div class="map-serch">
+    <input type="text" id="search-input" />
+    <button class="toCityBtn">去指定城市</button>
+  </div>
+</body>
+</html>

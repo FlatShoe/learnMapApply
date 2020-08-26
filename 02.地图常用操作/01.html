@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>地图搜索 （插件的两种加载方式）</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+    li {
+      list-style: none;
+    }
+    #container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+    .map-serch {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 99;
+      min-width: 300px;
+      border: 1px solid #ccc;
+      box-shadow: 0 0 5px;
+      padding: 20px;
+    }
+    .map-serch input {
+      width: 100%;
+      text-indent: 1em;
+      outline: none;
+      border: 1px solid #ccc;
+    }
+    .map-serch .serch-content {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-top: none;
+      font-size: 12px;
+    }
+    .map-serch .serch-wrapper {
+      max-height: 300px;
+      overflow: auto;
+    }
+    .map-serch .serch-wrapper li {
+      height: 20px;
+      line-height: 20px;
+      padding-left: 1em;
+      cursor: pointer;
+    }
+    .map-serch .serch-wrapper li:hover{
+      background-color: #C8E49D;
+    }
+  </style>
+</head>
+<body>
+  <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=831c3262a98f77fcd4f52ad006e25cb0"></script>
+  <!-- 
+        插件加载方式2 
+      引入时 通过传参的方式进行加载
+      在key的值后面添加参数plugin 参数值为插件名称 &plugin=AMap.Autocomplete
+
+      <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=831c3262a98f77fcd4f52ad006e25cb0&plugin=AMap.Autocomplete"></script>
+    -->
+  <script>
+    /*
+        插件加载方式1
+    * 地图搜索 需要一个插件Autocomplete 需要地图加载完成才可以实例
+    *new AMap.Autocomplete().search('北京', function (status, data) {
+           
+           @param {string} state 对应的状态信息
+           @data {object} data 该搜索地的相关信息数据
+           
+           console.log(status)
+           console.log(data)
+    *     })
+    */
+    window.onload = function () {
+      const map = new AMap.Map('container')
+      // 加载插件 Autocomplete 地图加载完成会促发的回调函数
+      AMap.plugin('AMap.Autocomplete', function () {
+        // // 实例地图插件
+        // new AMap.Autocomplete().search('北京', function (status, data) {
+        //   /*
+        //   * @param {string} state 对应的状态信息
+        //   * @data {object} data 该搜索地的相关信息数据
+        //   */
+        //   console.log(status)
+        //   console.log(data)
+        // })
+        const ul = document.querySelector('.serch-wrapper'),
+              serch_input = document.querySelector('.serch-input')
+        serch_input.addEventListener('input', function () {
+                  ul.innerHTML = ''
+                  // 实例地图插件
+                  new AMap.Autocomplete().search(this.value, function (status, data) {
+                    for (let i = 0; i < data.count; i++) {
+                      const info = data.tips[i]
+                      console.log(info)
+                      const li = document.createElement('li')
+                      li.innerText = info.name
+                      li.addEventListener('click', getMapInfo(info))
+                      ul.appendChild(li)
+                    }
+                  })
+                })
+        // 点击li元素的促发的事件函数
+        function getMapInfo (data) {
+          return function () {
+            const {lng, lat} = data.location
+            // 设置地图中心和地图级别
+            map.setCenter([lng, lat])
+            map.setZoom(18)
+          }
+        }
+      })
+    }
+  </script>
+  <div id="container"></div>
+  <div class="map-serch">
+    <input class="serch-input" type="text" placeholder="请输入搜索内容" />
+    <div class="serch-content">
+      <ul class="serch-wrapper"></ul>
+    </div>
+  </div>
+</body>
+</html>

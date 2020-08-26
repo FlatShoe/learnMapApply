@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>路线指定 （公交路线-经纬度）</title>
+  <style>
+    #container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+
+    .panel-content {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 99;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 引入公交路线规划插件 AMap.Transfer -->
+  <script type="text/javascript"
+    src="https://webapi.amap.com/maps?v=1.4.15&key=831c3262a98f77fcd4f52ad006e25cb0&plugin=AMap.Transfer,AMap.Autocomplete"></script>
+  <script>
+    /*
+    *   // 构造公交规划导航类 并调用search方法
+    *   new AMap.Transfer({
+    *    map: map,
+    *    panel: panel
+    *   }).serch(new AMap.LngLat(起点横坐标, 起点纵坐标), new AMap.LngLat(终点横坐标，终点纵坐标), function (status, info) {})
+    */
+    window.onload = function () {
+      const map = new AMap.Map('container')
+      // 开始点与结束点信息
+      let startInfo = {},
+        endInfo = {}
+      // 关键字搜索提示
+      const autoStart = new AMap.Autocomplete({
+        input: 'search-input-start'
+      })
+      const autoEnd = new AMap.Autocomplete({
+        input: 'search-input-end'
+      })
+      // 监听选择事件
+      AMap.event.addListener(autoStart, 'select', function (e) {
+        startInfo = e.poi
+      })
+      AMap.event.addListener(autoEnd, 'select', function (e) {
+        endInfo = e.poi
+      })
+
+      // 构造公交规划导航类
+      const transfer = new AMap.Transfer({
+        map: map,
+        panel: panel,
+        city: '北京'  // 添加城市限制
+      })
+      const search_start = document.querySelector('#search-input-start'),
+        search_end = document.querySelector('#search-input-start')
+      document.querySelector('.btn')
+        .addEventListener('click', function () {
+          const start = startInfo.location.toString().split(','),
+                end = endInfo.location.toString().split(',')
+          transfer.search(new AMap.LngLat(start[0], start[1]), new AMap.LngLat(end[0], end[1]), function (status, result) {
+            if (status === 'complete') {
+              console.log('绘制公交路线完成')
+            } else {
+              console.log('获取公交数据失败：' + result)
+            }
+          })
+        })
+
+    }
+  </script>
+  <div id="container"></div>
+  <div class="panel-content">
+    <label>起点</label>
+    <input type="text" id="search-input-start" />
+    <label>终点</label>
+    <input type="text" id="search-input-end" />
+    <button class="btn">确定</button>
+    <div id="panel"></div>
+  </div>
+</body>
+
+</html>

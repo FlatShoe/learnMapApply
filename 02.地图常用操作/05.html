@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>地图搜索与poi结合（2）周边搜索，在中心点附近一定范围进行关键字搜索</title>
+  <style>
+    #container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+
+    .serch {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 99;
+    }
+  </style>
+</head>
+
+<body>
+  <script type="text/javascript"
+    src="https://webapi.amap.com/maps?v=1.4.15&key=831c3262a98f77fcd4f52ad006e25cb0&plugin=AMap.Autocomplete,AMap.PlaceSearch"></script>
+  <script>
+    /*
+    * searchNearBy(城市, 坐标数组, 范围, 回调) 搜索走边服务
+    */
+    window.onload = function () {
+      const map = new AMap.Map('container')
+      const search_input = document.querySelector('#search-input')
+      // 城市
+      let city = ''
+      // 中心点
+      let cpoint = map.getCenter().toString().split(',')
+      // 范围
+      let range = 1000
+
+      document.querySelector('.serch-btn').addEventListener('click', function () {
+        // 关键字
+        const keyWorks = search_input.value
+        new AMap.PlaceSearch({
+          type: keyWorks,
+          map: map,
+          panel: 'serct-panel'
+        }).searchNearBy(city, cpoint, range, function () {})
+      })
+    }
+  </script>
+  <div id="container"></div>
+  <div class="serch">
+    <input id="search-input" type="text" />
+    <button class="serch-btn">搜索</button>
+    <div id="serct-panel"></div>
+  </div>
+</body>
+
+</html>

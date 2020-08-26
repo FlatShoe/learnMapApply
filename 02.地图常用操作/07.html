@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>地图转换 2d转3d</title>
+  <style>
+    #container {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- 引入2D/3D转换控制器 AMap.ControlBar-->
+  <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=831c3262a98f77fcd4f52ad006e25cb0&plugin=AMap.ControlBar"></script>
+  <script>
+    window.onload = function () {
+      const map = new AMap.Map('container', {
+        zoom: 17,
+        pitch: 90, // 倾斜度
+        viewMode: '3D', // 开启3D效果 默认2D
+        buildingAnimation: true,//楼块出现是否带动画
+        center:[116.333926,39.997245]
+      })
+      // 添加插件
+      map.addControl(new AMap.ControlBar({
+        showZoomBar: true, // 级别控制器
+        showControlButton: true, // 倾斜旋转器
+        // 控制器定位位置
+        position: {
+          let: '30px',
+          top: '30px'
+        } 
+      }))
+    }
+  </script>
+  <div id="container"></div>
+</body>
+</html>
