@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>地图容器尺寸发生改变时促发的事件</title>
+  <style>
+    #container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <script type="text/javascript"
+    src="https://webapi.amap.com/maps?v=1.4.15&key=831c3262a98f77fcd4f52ad006e25cb0"></script>
+  <script>
+    window.onload = function () {
+      const map = new AMap.Map('container', {
+        resizeEnable: true // resizeEnable 为true 时 才能促发地图容器尺寸改变时的事件
+      })
+
+      // 地图容器尺寸发生改变时促发的事件
+      map.on('resize', function () {
+        console.log('容器尺寸正在改变')
+      })
+    }
+  </script>
+  <div id="container"></div>
+</body>
+
+</html>

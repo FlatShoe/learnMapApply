@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>常用控件-maptype (地图类型切换)</title>
+  <style>
+    #container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 通过参数方式引入控件 -->
+  <script type="text/javascript"
+    src="https://webapi.amap.com/maps?v=1.4.15&key=831c3262a98f77fcd4f52ad006e25cb0&plugin=AMap.MapType"></script>
+  <script>
+    window.onload = function () {
+      const map = new AMap.Map('container', {
+        center: new AMap.LngLat(116.368904,39.913423),
+        zoom: 16
+      })
+      // 实例切换地图类型控件
+      const mapType = new AMap.MapType({
+        defaultType: 1, // 使用卫星地图 默认值0 初始默认图
+        showRoad: true  // 显示路况
+      })
+      // 添加控件
+      map.addControl(mapType)
+    }
+  </script>
+  <div id="container"></div> 插件
+</body>
+
+</html>

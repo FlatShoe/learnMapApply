@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOM事件</title>
+  <style>
+    #container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+    .box {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 99;
+    }
+  </style>
+</head>
+
+<body>
+  <script type="text/javascript"
+    src="https://webapi.amap.com/maps?v=1.4.15&key=831c3262a98f77fcd4f52ad006e25cb0"></script>
+  <script>
+    window.onload = function () {
+      const map = new AMap.Map('container')
+
+      // 地图加载完成促发的事件
+      map.on('complete', function () {
+        console.log('地图加载完成')
+      })
+      const btn1 = document.querySelector('.btn1'),
+            btn2 = document.querySelector('.btn2')
+
+      // 为DOM绑定事件
+      let btn1Event = AMap.event.addDomListener(btn1, 'click', function (e) {
+        map.zoomIn()
+      })
+      AMap.event.addDomListener(btn2, 'click', function () {
+        AMap.event.removeListener(btn1Event)
+        alert('已移除按钮1事件绑定')
+      })
+    }
+  </script>
+  <div id="container"></div>
+  <div class="box">
+    <button class="btn1">绑定事件</button>
+    <button class="btn2">解除绑定</button>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>自定义事件</title>
+  <style>
+    #container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <script type="text/javascript"
+    src="https://webapi.amap.com/maps?v=1.4.15&key=831c3262a98f77fcd4f52ad006e25cb0"></script>
+  <script>
+    /*
+    * 自定义事件: 通过AMap.eventListener或地图对象 on方法进行事件对象的绑定
+    * 事件派发: 通过地图对象 emit方法进行事件派发
+    */
+    window.onload = function () {
+      const map = new AMap.Map('container')
+
+      // 地图加载完成促发的事件
+      map.on('complete', function () {
+        console.log('地图加载完成')
+      })
+      
+      // 变量记录点击次数
+      let count = 0
+      const _handleCount = function () {
+        // 事件消费
+        map.emit('count123', {count: count+=1})
+      }
+      // 事件定义
+      map.on('count123', function (e) {
+        console.log(e)
+      })
+      AMap.event.addListener(map, 'click', _handleCount)
+      
+    }
+  </script>
+  <div id="container"></div>
+</body>
+
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>地图缩放改变等级促发的事件</title>
+  <style>
+    #container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+  </style>
+</head>
+<body>
+  <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=831c3262a98f77fcd4f52ad006e25cb0"></script>
+  <script>
+    window.onload = function () {
+      const map = new AMap.Map('container')
+
+      // 等级缩放事件
+      map.on('zoomstart', function () {
+        console.log('地图等级改变开始时')
+      })
+      map.on('zoomend', function () {
+        console.log('地图等级改变结束时')
+      })
+    }
+  </script>
+  <div id="container"></div>
+</body>
+</html>

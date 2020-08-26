@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>矢量图的显示隐藏事件</title>
+  <style>
+    #container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <script type="text/javascript"
+    src="https://webapi.amap.com/maps?v=1.4.15&key=831c3262a98f77fcd4f52ad006e25cb0"></script>
+  <script>
+    window.onload = function () {
+      const map = new AMap.Map('container', {
+        center: [116.405467, 39.907761]
+      })
+
+      // 实例文本覆盖物
+      const text = new AMap.Text({
+        text: '覆盖物',
+        position: [116.405467, 39.907761]
+      })
+      // 地图添加文本覆盖物
+      text.setMap(map)
+
+      // 实例矢量图覆盖物
+      const circleMarker = new AMap.CircleMarker({
+        center: new AMap.LngLat(116.39,39.9),
+        radius: 100
+      })
+      // 地图添加矢量图盖物
+      circleMarker.setMap(map)
+
+
+      // 矢量图显示和隐藏事件
+      setTimeout(() => {
+        circleMarker.hide()
+      }, 2000)
+      setTimeout(() => {
+        circleMarker.show()
+      }, 4000)
+    }
+  </script>
+  <div id="container"></div>
+</body>
+
+</html>
+
+</html>
